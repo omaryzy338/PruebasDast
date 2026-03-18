@@ -14,9 +14,9 @@ app.use(helmet());
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
-      defaultSrc: ["'self'"],          // Evita recursos externos
-      scriptSrc: ["'self'"],           // Bloquea scripts externos
-      styleSrc: ["'self'"],            // Evita style-src unsafe-inline
+      defaultSrc: ["'self'"],          // Fallback seguro
+      scriptSrc: ["'self'"],           // Sin wildcard
+      styleSrc: ["'self'"],            // Evita unsafe-inline
       objectSrc: ["'none'"],           // Bloquea objetos incrustados
       frameAncestors: ["'none'"],      // Anti-Clickjacking
     },

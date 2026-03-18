@@ -1,0 +1,26 @@
+Nombre: Omar Alejandro Ramirez Olmos
+Matricula:22734
+Grado y Grupo: 8B
+
+Se realizo una API llamada server.js ubicada en la carpeta API;
+Se realizaron pruebas DAST con la aplicacion ZAP, y salieron 5 alertas cuales fueron:
+
+1. CSP: Failure to Define Directive with No Fallback.
+Qué significa: La política de seguridad de contenido (Content Security Policy, CSP) no está definida correctamente o falta un “fallback” (directiva por defecto).
+Impacto: Sin CSP, el navegador no tiene reglas claras para bloquear scripts maliciosos (XSS).
+
+2. Cabecera Content Security Policy (CSP) no configurada.
+Qué significa: Directamente no hay ninguna cabecera CSP.
+Impacto: La API o aplicación queda más expuesta a inyecciones de código.
+
+3. Falta de cabecera Anti-Clickjacking
+Qué significa: No tienes protección contra ataques de clickjacking (cuando tu sitio se incrusta en un iframe malicioso).
+Impacto: Un atacante podría engañar al usuario para hacer clic en tu API incrustada en otra página.
+
+4. El servidor divulga información mediante un campo(s) de encabezado de respuesta HTTP ''''X-Powered-By''''
+Qué significa: El servidor (Express, Node.js) está enviando un header que revela la tecnología usada.
+Impacto: Da pistas a un atacante sobre qué stack usa, facilitando ataques dirigidos.
+
+5. Falta encabezado X-Content-Type-Options
+Qué significa: No tienes el encabezado que evita que el navegador “adivine” tipos de contenido.
+Impacto: Puede permitir ataques de MIME sniffing.

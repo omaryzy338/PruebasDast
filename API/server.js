@@ -1,43 +1,58 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const helmet = require('helmet');
 
 const app = express();
 const PORT = 3000;
 
-// Middleware para parsear JSON
 app.use(bodyParser.json());
 
-// Credenciales simples (solo ejemplo, no usar en producción)
-const USER = "admin";
-const PASS = "1234";
+// 🔒 Seguridad con Helmet
+app.use(helmet());
 
-// Middleware de autenticación básica
-function authMiddleware(req, res, next) {
-    const { user, pass } = req.headers;
+// Configuración personalizada de CSP (Content Security Policy)
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      objectSrc: ["'none'"],
+      frameAncestors: ["'none'"], // Anti-Clickjacking
+    },
+  })
+);
 
-    if (user === USER && pass === PASS) {
-        next();
-    } else {
-        res.status(401).json({ error: "Acceso denegado: credenciales inválidas" });
-    }
-}
+// Deshabilitar encabezado X-Powered-By
+app.disable('x-powered-by');
 
 // Rutas públicas
 app.get('/', (req, res) => {
-    res.send("Bienvenido a la API de PruebasDast");
+  res.send("Bienvenido a la API de PruebasDast con cabeceras seguras");
 });
+
+// Middleware de autenticación básica
+const USER = "admin";
+const PASS = "1234";
+
+function authMiddleware(req, res, next) {
+  const { user, pass } = req.headers;
+  if (user === USER && pass === PASS) {
+    next();
+  } else {
+    res.status(401).json({ error: "Acceso denegado: credenciales inválidas" });
+  }
+}
 
 // Rutas protegidas
 app.get('/datos', authMiddleware, (req, res) => {
-    res.json({ mensaje: "Accediste con GET a datos protegidos" });
+  res.json({ mensaje: "Accediste con GET a datos protegidos" });
 });
 
 app.post('/datos', authMiddleware, (req, res) => {
-    const body = req.body;
-    res.json({ mensaje: "Accediste con POST a datos protegidos", datos: body });
+  res.json({ mensaje: "Accediste con POST a datos protegidos", datos: req.body });
 });
 
 // Iniciar servidor
 app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });

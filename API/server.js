@@ -13,12 +13,18 @@ app.use(helmet());
 // Configuración personalizada de CSP (Content Security Policy)
 app.use(
   helmet.contentSecurityPolicy({
+    useDefaults: false, // Desactiva defaults para que no se cuelen wildcards
     directives: {
       defaultSrc: ["'self'"],          // Fallback seguro
-      scriptSrc: ["'self'"],           // Sin wildcard
-      styleSrc: ["'self'"],            // Evita unsafe-inline
+      scriptSrc: ["'self'"],           // Solo scripts propios
+      styleSrc: ["'self'"],            // Solo estilos propios (sin unsafe-inline)
+      imgSrc: ["'self'"],              // Solo imágenes locales
+      connectSrc: ["'self'"],          // Solo conexiones locales
       objectSrc: ["'none'"],           // Bloquea objetos incrustados
       frameAncestors: ["'none'"],      // Anti-Clickjacking
+      baseUri: ["'self'"],             // Evita redirecciones inseguras
+      formAction: ["'self'"],          // Formularios solo hacia tu dominio
+   
     },
   })
 );

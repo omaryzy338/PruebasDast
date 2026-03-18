@@ -14,10 +14,11 @@ app.use(helmet());
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'"],
-      objectSrc: ["'none'"],
-      frameAncestors: ["'none'"], // Anti-Clickjacking
+      defaultSrc: ["'self'"],          // Evita recursos externos
+      scriptSrc: ["'self'"],           // Bloquea scripts externos
+      styleSrc: ["'self'"],            // Evita style-src unsafe-inline
+      objectSrc: ["'none'"],           // Bloquea objetos incrustados
+      frameAncestors: ["'none'"],      // Anti-Clickjacking
     },
   })
 );
